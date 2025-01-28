@@ -1,56 +1,44 @@
-from collections import deque
-#1.28
+# 读取迷宫的行数n和列数m
+n, m = map(int, input().split())
 
+# 使用列表推导式读取迷宫数据，逐行转换成整数并保存在gra二维数组中
+# 每一行通过 input().split() 先转换成字符串列表，再用 map(int, ...) 转换为整数
+gra = [list(map(int, input().split())) for i in range(n)]
 
-def bfs(maze, start, end, N, M):
-    # 定义四个方向（上、下、左、右）
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+# 定义四个方向的移动：下、上、右、左
+dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 
-    # 队列，存储当前位置和当前步数
-    queue = deque([(start[0], start[1], 0)])
+# 读取起点和终点的坐标，转换为从0开始的索引
+x1, y1, x2, y2 = map(int, input().split())
+x1, y1, x2, y2 = x1 - 1, y1 - 1, x2 - 1, y2 - 1  # 转换为0-based坐标
 
-    # 记录访问过的节点
-    visited = [[False] * M for _ in range(N)]
-    visited[start[0]][start[1]] = True
+# 初始化队列，保存起点坐标和步数
+q = [[x1, y1, 0]]  # 队列中每个元素是一个列表： [x, y, dis]，其中dis是当前的步数
 
-    while queue:
-        x, y, dist = queue.popleft()
+# 设置标志变量f，判断是否找到终点
+f = True
 
-        # 如果到达终点，返回步数
-        if (x, y) == end:
-            return dist
+# 广度优先搜索（BFS）循环
+while q:
+    # 从队列中取出第一个元素
+    x, y, dis = q.pop(0)  # x, y 是当前的位置，dis 是到该位置的步数
 
-        # 遍历四个方向
-        for dx, dy in directions:
-            nx, ny = x + dx, y + dy
+    # 如果当前坐标等于终点坐标，输出步数并结束搜索
+    if x == x2 and y == y2:
+        f = False  # 找到终点，设置 f 为 False
+        print(dis)  # 输出当前步数，即最短路径的步数
+        break  # 退出循环，结束程序
 
-            # 检查新位置是否合法
-            if 0 <= nx < N and 0 <= ny < M and maze[nx][ny] == 1 and not visited[nx][ny]:
-                visited[nx][ny] = True
-                queue.append((nx, ny, dist + 1))
+    # 遍历四个方向
+    for xx, yy in dirs:
+        # 计算新位置的坐标
+        tx, ty = xx + x, yy + y
 
-    # 如果无法到达终点，返回-1
-    return -1
+        # 检查新位置是否合法（在迷宫范围内且是可走的地方，即 gra[tx][ty] == 1）
+        if tx >= 0 and tx < n and ty >= 0 and ty < m and gra[tx][ty] == 1:
+            gra[tx][ty] = 0  # 标记新位置为已访问，避免重复访问
+            q.append([tx, ty, dis + 1])  # 将新位置加入队列，并更新步数
 
-
-def main():
-    # 输入读取
-    N, M = map(int, input().split())
-    maze = [list(map(int, input().split())) for _ in range(N)]
-    x1, y1, x2, y2 = map(int, input().split())
-
-    # 注意坐标是从1开始的，要转成从0开始的坐标
-    start = (x1 - 1, y1 - 1)
-    end = (x2 - 1, y2 - 1)
-
-    # 如果起点或终点是障碍物，直接返回-1
-    if maze[start[0]][start[1]] == 0 or maze[end[0]][end[1]] == 0:
-        print(-1)
-    else:
-        # 调用BFS算法
-        result = bfs(maze, start, end, N, M)
-        print(result)
-
-
-if __name__ == "__main__":
-    main()
+# 如果搜索结束后 f 仍然为 True，表示没有找到终点，输出 -1
+if f:
+    print(-1)
