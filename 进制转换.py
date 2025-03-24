@@ -18,4 +18,4 @@ def decimal_to_base(n, base):
 # 示例：
 print(decimal_to_base(255, 2))  # 输出: 11111111
 print(decimal_to_base(255, 16))  # 输出: FF
-print(decimal_to_base(-255, 8))  # 输出: -377
+print(decimal_to_base(10, 2))
