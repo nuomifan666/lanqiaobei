@@ -1,12 +1,11 @@
-def tr(n,base):
-    sum=0
+def zhuanhua(n,m):
+    res=0
     while n>0:
-        sum+=n%base
-        n=n//base
-    return sum
-
+        res+=n%m
+        n=n//m
+    return res
 count=0
 for i in range(1,2025):
-    if tr(i,2)==tr(i,4):
+    if zhuanhua(i,2)==zhuanhua(i,4):
         count+=1
 print(count)
