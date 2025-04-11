@@ -10,7 +10,7 @@ dt1 = datetime(2023, 1, 1)#默认是2023-01-01 00：00：00
 dt2 = datetime(2023, 12, 31)
 res = 0
 while dt2 >= dt1:
-    date = dt1.strftime('%Y%m%d')#格式化成20230101这种格式
+    date = dt1.strftime()#格式化成20230101这种格式
     num = 0
     for i in range(len(st)):
         if num == 8:#如果找到8位数字与当前日期相等res+1
